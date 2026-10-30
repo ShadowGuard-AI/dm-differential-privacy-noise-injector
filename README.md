@@ -1,3 +1,5 @@
+![Banner](banner.png)
+
 # dm-differential-privacy-noise-injector
 Adds Laplacian noise to numerical data to provide differential privacy. The amount of noise can be configured to balance privacy and utility, and the tool provides guidance on choosing appropriate parameters. - Focused on Tools designed to generate or mask sensitive data with realistic-looking but meaningless values
 
