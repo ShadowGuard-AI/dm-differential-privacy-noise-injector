@@ -58,6 +58,21 @@ def apply_differential_privacy(data_file, epsilon, output_file, sensitivity=1.0,
         column (int, optional): Column index to apply noise to. Defaults to 0.
         delimiter (str, optional): Delimiter used in the data file. Defaults to ','.
     """
+    # Validate before opening the output file. Checking epsilon inside
+    # laplace_noise, as this code used to, meant an invalid epsilon was
+    # only discovered after the output file had been created and its
+    # first lines written, leaving a truncated file that looks usable.
+    # A negative column was worse: it passed the range check below and
+    # Python indexing quietly noised the last column instead.
+    if epsilon <= 0:
+        logging.error("Epsilon must be a positive number.")
+        sys.exit(1)
+    if sensitivity <= 0:
+        logging.error("Sensitivity must be a positive number.")
+        sys.exit(1)
+    if column < 0:
+        logging.error("Column index cannot be negative.")
+        sys.exit(1)
     try:
         with open(data_file, 'r') as infile, open(output_file, 'w') as outfile:
             for i, line in enumerate(infile):
