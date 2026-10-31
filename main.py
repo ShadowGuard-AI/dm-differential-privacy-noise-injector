@@ -2,6 +2,7 @@ import argparse
 import logging
 import sys
 import numpy as np
+from pathlib import Path
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -73,36 +74,45 @@ def apply_differential_privacy(data_file, epsilon, output_file, sensitivity=1.0,
     if column < 0:
         logging.error("Column index cannot be negative.")
         sys.exit(1)
+    if Path(data_file).resolve() == Path(output_file).resolve():
+        logging.error("Output file must not be the same as the input file.")
+        sys.exit(1)
     try:
-        with open(data_file, 'r') as infile, open(output_file, 'w') as outfile:
-            for i, line in enumerate(infile):
-                line = line.strip()
-                values = line.split(delimiter)
-
-                # Input validation
-                if len(values) <= column:
-                    logging.error(f"Column index {column} is out of range for line {i+1}.  Skipping this line.")
-                    outfile.write(line + '\n')  # Write original line to output
-                    continue
-                
-                try:
-                    numerical_value = float(values[column])
-                except ValueError:
-                    logging.error(f"Non-numerical value found in column {column} on line {i+1}. Skipping this line.")
-                    outfile.write(line + '\n')
-                    continue
-
-                # Apply Laplacian noise
-                noise = laplace_noise(sensitivity, epsilon)
-                noisy_value = numerical_value + noise
-
-                # Create noisy line
-                noisy_values = values[:] # Make a copy of the list
-                noisy_values[column] = str(noisy_value)
-                noisy_line = delimiter.join(noisy_values)
-
-                outfile.write(noisy_line + '\n')
-
+        with open(data_file, 'r') as infile:
+            raw_lines = infile.readlines()
+    except FileNotFoundError:
+        logging.error(f"Data file not found: {data_file}")
+        sys.exit(1)
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")
+        sys.exit(1)
+    output_lines = []
+    noised_count = 0
+    try:
+        for i, raw_line in enumerate(raw_lines):
+            line = raw_line.strip()
+            values = line.split(delimiter)
+            if len(values) <= column:
+                logging.error(f"Column index {column} is out of range for line {i+1}.  Skipping this line.")
+                output_lines.append(line + '\n')
+                continue
+            try:
+                numerical_value = float(values[column])
+            except ValueError:
+                logging.error(f"Non-numerical value found in column {column} on line {i+1}. Skipping this line.")
+                output_lines.append(line + '\n')
+                continue
+            noise = laplace_noise(sensitivity, epsilon)
+            noisy_value = numerical_value + noise
+            noisy_values = values[:]
+            noisy_values[column] = str(noisy_value)
+            output_lines.append(delimiter.join(noisy_values) + '\n')
+            noised_count += 1
+        if noised_count == 0:
+            logging.error("No values were noised.")
+            sys.exit(1)
+        with open(output_file, 'w') as outfile:
+            outfile.writelines(output_lines)
         logging.info(f"Differential privacy applied successfully. Noisy data written to {output_file}")
 
     except FileNotFoundError:
