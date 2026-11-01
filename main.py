@@ -40,6 +40,14 @@ def laplace_noise(sensitivity, epsilon):
         if epsilon <= 0:
             raise ValueError("Epsilon must be a positive number.")
         
+        # Each value draws its own noise at the full scale, sensitivity
+        # divided by epsilon, and nothing in this tool splits epsilon
+        # across the rows of a file or keeps a running total of what a
+        # file has spent. The parameter describes one value at a time.
+        # Anyone adding up the privacy cost of a whole release has to do
+        # that accounting themselves, outside this tool. There is also no
+        # seed anywhere in it: numpy draws from its global generator, so a
+        # run cannot be reproduced or audited after the fact.
         scale = sensitivity / epsilon
         noise = np.random.laplace(0, scale)
         return noise
@@ -99,11 +107,22 @@ def apply_differential_privacy(data_file, epsilon, output_file, sensitivity=1.0,
             try:
                 numerical_value = float(values[column])
             except ValueError:
+                # A skipped line is written out exactly as it came in. That
+                # is what saves a header row: it fails the float test and
+                # passes through untouched. It is also what leaves a stray
+                # text value sitting in the noised column in the clear, and
+                # the run still succeeds as long as one other value noised.
                 logging.error(f"Non-numerical value found in column {column} on line {i+1}. Skipping this line.")
                 output_lines.append(line + '\n')
                 continue
             noise = laplace_noise(sensitivity, epsilon)
             noisy_value = numerical_value + noise
+            # Only the target cell is rewritten, as a full precision float
+            # string; every other cell keeps its original text byte for
+            # byte, including its formatting. A short input like 5 comes
+            # out as a long decimal, and that shape change is visible in
+            # every noised row. float() also accepts nan and inf here, and
+            # noise added to either one changes nothing about them.
             noisy_values = values[:]
             noisy_values[column] = str(noisy_value)
             output_lines.append(delimiter.join(noisy_values) + '\n')
