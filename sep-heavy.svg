@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 48" width="1200" height="48" role="img" aria-label="Heavy separator: a brayer rolling an ink band between small gold leaf books">
+  <rect x="0" y="22" width="1200" height="4" fill="#2B2B2E"/>
+  <g fill="#D8B66E" stroke="#2B2B2E" stroke-width="1.5">
+    <rect x="18" y="12" width="10" height="24"/>
+    <rect x="34" y="12" width="10" height="24"/>
+    <rect x="1156" y="12" width="10" height="24"/>
+    <rect x="1172" y="12" width="10" height="24"/>
+  </g>
+  <line x1="24" y1="18" x2="40" y2="18" stroke="#C68A8A" stroke-width="2"/>
+  <line x1="1162" y1="18" x2="1178" y2="18" stroke="#C68A8A" stroke-width="2"/>
+  <rect x="470" y="19" width="260" height="10" fill="#E2B2B2"/>
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; 120 0; 0 0" dur="9s" repeatCount="indefinite"/>
+    <circle cx="540" cy="24" r="15" fill="#FAF6EB" stroke="#2B2B2E" stroke-width="3"/>
+    <line x1="552" y1="14" x2="586" y2="2" stroke="#2B2B2E" stroke-width="4"/>
+  </g>
+</svg>

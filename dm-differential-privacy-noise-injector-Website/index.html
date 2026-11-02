@@ -3,164 +3,168 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dm Differential Privacy Noise Injector: what it is, how it runs, where it stops</title>
-<meta name="description" content="Dm Differential Privacy Noise Injector is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.">
+<title>dm-differential-privacy-noise-injector: The Canvas Stretcher's Key Drawer</title>
 <style>
-:root {
-  --bg: #121418; --panel: #1c2028; --ink: #e8ecf0;
-  --mut: #252b36;
-  --acc: #5cc8e0; --acc2: #f0a05c;
-  --line: #1c2028;
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink);
-  font-family: Charter, Georgia, serif; line-height: 1.55; }
-code, pre, .mono { font-family: 'DejaVu Sans Mono', monospace; }
-a { color: var(--acc2); }
-.hero { padding: 3rem 6vw 1rem; }
-.hero img.banner { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; }
-.logo { width: 92px; height: 92px; border-radius: 18px;
-  border: 1px solid var(--line); }
-h1 { font-size: 2.4rem; margin: 0.4em 0 0.1em; }
-h2 { border-bottom: 2px solid var(--acc); padding-bottom: 0.2em;
-  margin-top: 2em; }
-.lede { font-size: 1.15rem; max-width: 62ch; }
-main { padding: 0 6vw 3rem; max-width: 1180px; margin: 0 auto; }
-.grid { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.card { background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1rem 1.2rem; }
-.card.pop { animation: rise 0.7s ease both; }
-@keyframes rise { from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; } }
-pre.code { background: #101014; color: #e8e6df; padding: 1rem 1.2rem;
-  border-radius: 12px; overflow-x: auto; font-size: 0.86rem;
-  border-left: 5px solid var(--acc); }
-table { border-collapse: collapse; width: 100%; }
-td, th { border-bottom: 1px solid var(--line); padding: 0.45rem 0.6rem;
-  text-align: left; }
-.shots { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.shots img { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; background: #f4f1e8; }
-footer { padding: 2rem 6vw; border-top: 1px solid var(--line);
-  color: var(--mut); }
-.rail { display: flex; gap: 1.2rem; align-items: flex-start; }
-.rail nav { position: sticky; top: 1rem; min-width: 180px; }
-@media (max-width: 760px) { .rail { flex-direction: column; }
-  .rail nav { position: static; } }
-@media (prefers-reduced-motion: reduce) {
-  .card.pop { animation: none; } * { scroll-behavior: auto; } }
+@font-face { font-family: "Carlito"; src: url("fonts/Carlito-Regular.ttf") format("truetype"); font-weight: 400; }
+@font-face { font-family: "Carlito"; src: url("fonts/Carlito-Bold.ttf") format("truetype"); font-weight: 700; }
+@font-face { font-family: "Cabin"; src: url("fonts/Cabin-Regular.ttf") format("truetype"); font-weight: 400; }
+@font-face { font-family: "Cabin"; src: url("fonts/Cabin-Bold.ttf") format("truetype"); font-weight: 700; }
+body { margin: 0; background: #F0F0EE; color: #3A3A3E; font-family: "Cabin", sans-serif; line-height: 1.55;
+  background-image: radial-gradient(#E2B2B2 1px, transparent 1px), radial-gradient(#C9C9C7 1px, transparent 1px);
+  background-size: 46px 46px, 46px 46px; background-position: 0 0, 23px 23px; }
+main { max-width: 920px; margin: 0 auto; padding: 28px 18px 60px; }
+h1, h2, h3 { font-family: "Carlito", sans-serif; color: #2B2B2E; }
+h1 { font-size: 2rem; margin: 0 0 6px; }
+section, .compartment { background: #EFD9D9; border: 2px solid #2B2B2E; border-radius: 6px; padding: 20px 22px; margin: 22px 0; }
+section.plain { background: #FAF6EB; }
+img { max-width: 100%; height: auto; display: block; margin: 12px auto; }
+code, pre { font-family: "Cabin", monospace; background: #FAF6EB; }
+pre { overflow-x: auto; padding: 14px; border: 1px solid #2B2B2E; white-space: pre-wrap; }
+.pull { display: inline-block; background: #FAF6EB; color: #2B2B2E; border: 2px solid #2B2B2E; border-radius: 50%; padding: 2px 10px; font-family: "Carlito", sans-serif; }
+.gap { border: 4px solid #2B2B2E; background: #FAF6EB; padding: 18px 20px; margin: 16px 0; }
+.gap h3 { margin-top: 0; font-size: 1.35rem; }
+button.wedge, .wedge-btn { font-family: "Carlito", sans-serif; font-size: 1.05rem; background: #EFE9DC; color: #2B2B2E; border: 2px solid #D8B66E; padding: 10px 22px; cursor: pointer; }
+button.wedge:hover { background: #E2B2B2; }
+button.wedge:active { background-image: linear-gradient(100deg, transparent 30%, #E2B2B2 50%, transparent 70%); }
+button.wedge:focus, a:focus { outline: 3px double #2B2B2E; outline-offset: 3px; }
+a { color: #3A3A3E; text-decoration: none; }
+a::before { content: "\25C7  "; color: #C9C9C7; }
+a:hover::before, a:focus::before { color: #C68A8A; }
+.slack { float: right; font-size: 1.5rem; }
+blockquote.slip { border-left: 4px solid #2B2B2E; background: #FAF6EB; margin: 12px 0; padding: 8px 14px; font-family: "Cabin", sans-serif; }
+.small { font-size: 0.92rem; }
 </style>
 </head>
-<body class="layout-ledger">
-<!-- This page exists for dm-differential-privacy-noise-injector alone: the layout (ledger),
-     the colors, and the type were picked for this project, not
-     shared with the other project pages. The code block below is
-     copied from the file it names, line for line. If it looks
-     plain, that is because the project is plain, and I would
-     rather the page match the project than dress it up. The one
-     thing I will not do here is oversell: what this project does
-     not do is stated on the page, not hidden from it. -->
-<header class="hero">
-  <img class="logo" src="assets/logo.png" alt="Dm Differential Privacy Noise Injector logo">
-  <img class="banner" src="assets/banner.png" alt="">
-  <h1>Dm Differential Privacy Noise Injector</h1>
-  <p class="mono"><a href="https://github.com/ShadowGuard-AI/dm-differential-privacy-noise-injector">github.com/ShadowGuard-AI/dm-differential-privacy-noise-injector</a></p>
-</header>
-
+<body>
 <main>
-  <section class="rail">
-    <nav aria-label="on this page">
-      <p class="mono"><a href="#run">Run it</a><br>
-      <a href="#files">The files</a><br>
-      <a href="#sheets">The sheets</a><br>
-      <a href="https://github.com/ShadowGuard-AI/dm-differential-privacy-noise-injector">The repo</a></p>
-    </nav>
-    <div>
-      <p class="lede">Dm Differential Privacy Noise Injector is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.</p>
-      <div class="grid">
-        <div class="card pop"><h3>What it is</h3>
-          <p>Dm Differential Privacy Noise Injector: 5 files, 165 counted
-          lines across Python 145, Markdown 19, Text 1. One job, done in the
-          open, in files you can read.</p></div>
-        <div class="card pop"><h3>The biggest piece</h3>
-          <p><code>main.py</code> carries the most
-          lines. If the project grows, that file is where the growth
-          lands first, for better or worse.</p></div>
-        <div class="card pop"><h3>The honest gap</h3>
-          <p>No test files yet. That is the honest gap, and the roadmap in the visuals folder says what the first one should cover.</p></div>
-      </div>
-      <section id="run">
-        <h2>Run it</h2>
-        <p>The repo README has the exact commands for this one. The
-        shape is the shape for most of my projects: clone it, read the
-        top file first so you know what will happen, then run it on
-        something you do not mind breaking.</p>
-        <p class="mono">$ git clone https://github.com/ShadowGuard-AI/dm-differential-privacy-noise-injector.git<br>$ cd dm-differential-privacy-noise-injector</p>
-      </section>
-      
-  <section aria-label="real code">
-    <h2>The code, as it sits in the repo</h2>
-    <p>From <code>main.py</code>, line 7 on. I did
-    not tidy it for the page. What you see is what the file has.</p>
-    <pre class="code"><code>logging.basicConfig(level=logging.INFO, format=&#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;)
+<img src="intro-banner.png" alt="One stretcher key where the north light reaches the bench first, the open key drawer behind it, no lettering anywhere">
+<h1>dm-differential-privacy-noise-injector: The Canvas Stretcher's Key Drawer</h1>
+<p>Inventory entry, medium noted first: a framer's workbench in a painting studio, the drawer of stretcher keys pulled open in the foreground, and one small wooden wedge doing the measuring for a tool that adds Laplacian noise to numbers. Open one compartment, shut it, open the next.</p>
+<img src="logo.png" alt="Logo: a single stretcher key, long taper and dented striking end, with the repository name below">
+<img src="banner.png" alt="Banner: the workbench seen along its length, the title lettered on the inventory card taped to the drawer front">
+<img src="scene.svg" alt="Animated scene in three stacked bands: still dye vats and racked stretchers, the key drawer pulled an inch wider by a hand, and a key tapped into a frame corner">
 
-def setup_argparse():
-    &quot;&quot;&quot;
-    Sets up the argument parser for the command-line interface.
+<section class="compartment" id="job">
+<span class="pull">1</span>
+<h2>Compartment one: the job itself</h2>
+<p>Numbers get Laplacian noise added. The mechanism operates value by value: a Laplace draw per value, driven by whoever runs the bench supplying both sensitivity and epsilon. Sensitivity counts as asserted by that operator, unchecked against actual figures. Nobody tallies an epsilon budget across successive jobs, so reworking identical material repeatedly accumulates exposure in a fashion this bench neither logs nor caps.</p>
+<p>Kinship, in the housed wording's own terms: this tool sits among tools designed to generate or mask sensitive data with realistic-looking but meaningless values.</p>
+<p>No column value from anyone's data, no invented epsilon figure, and no sample result appears anywhere on this site.</p>
+<button class="wedge" type="button">Tap the Wedge</button>
+</section>
 
-    Returns:
-        argparse.ArgumentParser: The argument parser object.
-    &quot;&quot;&quot;
-    parser = argparse.ArgumentParser(description=&#x27;Adds Laplacian noise to numerical data for differential privacy.&#x27;)
+<section class="compartment" id="choosing">
+<span class="pull">2</span>
+<h2>Compartment two: Choosing parameters</h2>
+<h3>Epsilon, Single Run</h3>
+<p>Epsilon means the privacy dial for one isolated job: twisting it smaller pours in extra noise, hardening privacy for that job; twisting it larger pours in less noise, softening privacy, leaving results nearer original figures.</p>
+<h3>Sensitivity, Default 1.0</h3>
+<p>Sensitivity means the biggest swing a single person, alternatively a single record, could impose upon a value inside the named column, expressed using that column's units. Establish it beforehand from knowledge about the material awaiting work. Should a column stretch across hundreds, sensitivity 1 falls short for that column. The printed fallback sensitivity equals 1.0.</p>
+</section>
 
-    parser.add_argument(&#x27;data_file&#x27;, type=str, help=&#x27;Path to the numerical data file (CSV).&#x27;)
-    parser.add_argument(&#x27;epsilon&#x27;, type=float, help=&#x27;Privacy parameter epsilon (higher value means less privacy). Must be a positive number.&#x27;)
-    parser.add_argument(&#x27;output_file&#x27;, type=str, help=&#x27;Path to the output file with noisy data.&#x27;)
-    parser.add_argument(&#x27;--sensitivity&#x27;, type=float, default=1.0, help=&#x27;Sensitivity of the data (default: 1.0).&#x27;)
-    parser.add_argument(&#x27;--column&#x27;, type=int, default=0, help=&#x27;Column index to apply noise to (default: 0).&#x27;)
-    parser.add_argument(&#x27;--delimiter&#x27;, type=str, default=&#x27;,&#x27;, help=&#x27;Delimiter used in the data file (default: comma).&#x27;)
+<section class="compartment" id="fetching">
+<span class="pull">3</span>
+<h2>Compartment three: fetching a copy, and one admitted repair</h2>
+<p>Copy this direction:</p>
+<pre>git clone https://github.com/ShadowGuard-AI/dm-differential-privacy-noise-injector</pre>
+<p><strong>Stamped as a repair.</strong> The housed address points toward an earlier organisational banner, ShadowStrikeHQ. Obeying it literally delivers a visitor to the wrong workshop. The line above is the replacement, spelled with the hyphen present in the organisation name, and it is labelled a repair here rather than dressed up as founding wording. Framers never scrape an old drawer card blank when contents change rooms: the superseded entry stays legible in the studio record at the foot of this page, ruled through by this note alone.</p>
+</section>
 
-    return parser
+<section class="compartment" id="invocation">
+<span class="pull">4</span>
+<h2>Compartment four: invocation outline, and the outline is where things halt</h2>
+<pre>./dm-differential-privacy-noise-injector [params]</pre>
+<p>Founding material supplies neither a demonstrated call nor any input filename, so the bench lines below are left empty on purpose:</p>
+<p>Demonstrated call: </p>
+<p>Input filename: </p>
+</section>
 
-def laplace_noise(sensitivity, epsilon):
-    &quot;&quot;&quot;</code></pre>
-  </section>
-      <section id="files">
-        <h2>The files that matter</h2>
-        <table><tr><th>File</th><th>Lines</th></tr>
-        <tr><td><code>main.py</code></td><td>145</td></tr>
-        <tr><td><code>README.md</code></td><td>19</td></tr>
-        <tr><td><code>requirements.txt</code></td><td>1</td></tr>
-        <tr><td><code>banner.png</code></td><td>0</td></tr>
-        <tr><td><code>logo.png</code></td><td>0</td></tr>
-        </table>
-        <p>Names doing the work: <span class="mono">setup_argparse, laplace_noise, apply_differential_privacy, main</span>.</p>
-      </section>
-      <section id="sheets">
-        <h2>Drawn by hand</h2>
-        <p>I sketch my projects on notebook paper so I have to
-        understand them well enough to draw them. The full set,
-        with the counts and how they were counted, is the
-        <a href="https://github.com/ShadowGuard-AI/dm-differential-privacy-noise-injector/tree/main/dm-differential-privacy-noise-injector-Visuals">dm-differential-privacy-noise-injector-Visuals</a>
-        folder in the repo. Nothing is drawn over the binder holes.
-        That is a rule, not a style.</p>
-        <div class="shots">
-          <img src="assets/architecture.png" alt="Hand drawn architecture sheet for Dm Differential Privacy Noise Injector">
-          <img src="assets/flowchart.png" alt="Hand drawn flowchart sheet for Dm Differential Privacy Noise Injector">
-          <img src="assets/product-map.png" alt="Hand drawn product map sheet for Dm Differential Privacy Noise Injector">
-        </div>
-      </section>
-    </div>
-  </section>
+<section class="compartment" id="switches">
+<span class="pull">5</span>
+<h2>Compartment five: switches, housed sequence preserved, three blanks confronted head on</h2>
+<ul>
+<li><code>-h</code>: a switch that displays guidance, then quits. Show help message and exit.</li>
+<li><code>--sensitivity</code>: No description provided</li>
+<li><code>--column</code>: No description provided</li>
+<li><code>--delimiter</code>: No description provided</li>
+</ul>
+<div class="gap">
+<h3>The gap, printed at full size</h3>
+<p>The Choosing parameters prose in compartment two discusses epsilon at length, and it names the column inside its sensitivity definition. Yet the parameter list contains no epsilon flag at all. There is no epsilon switch, no epsilon default, and nothing in the founding material says how epsilon is supplied.</p>
+<p>The same list gives <code>--sensitivity</code>, <code>--column</code>, and <code>--delimiter</code> each as "No description provided". A fourth guidance subject, the delimiter, receives no prose anywhere in the file at all.</p>
+<p>So the prose debates sensitivity, debates epsilon, and debates the named column, while the switch list describes none among its trio, and epsilon gets no switch whatsoever. That mismatch is logged here as a gap. No resolution is invented: no epsilon switch name is coined, and no description is written for a switch whose source line withheld one.</p>
+</div>
+</section>
+
+<section class="compartment" id="output">
+<span class="pull">6</span>
+<h2>Compartment six: output plus empty job rules</h2>
+<span class="slack" title="Slack canvas emblem: this panel alone carries it">&#9698;</span>
+<h3>Output Never Equals Input</h3>
+<p>The output file must not be the same file as the input file. Destination must differ from source, worded exactly as firmly as the founding material words it.</p>
+<h3>No Values Noised, No File Written</h3>
+<p>A run that noises no values exits with an error and writes no output file. The founding material prints no exit code for that rule, so none is printed here either.</p>
+</section>
+
+<section class="compartment" id="licence-a">
+<span class="pull">7A</span>
+<h2>Compartment seven, part A: the bench root licence</h2>
+<p>The bench root holds an MIT licence, calendar span 2025 to 2026. Its holder is described by outline only: a pen name spanning two words, then a bracketed compression squeezing a given name down to one initial, then a handle enclosed between round brackets. The holder line is never transcribed on this site.</p>
+</section>
+
+<section class="compartment" id="licence-b">
+<span class="pull">7B</span>
+<h2>Compartment seven, part B: the housed closing line, repaired on this site</h2>
+<p><strong>Stamped as a site repair.</strong> The housed closing line in the studio record below reads Copyright (c) ShadowStrikeHQ, using the earlier banner spelling. On this website only, that line is rewritten using today's hyphenated organisational spelling:</p>
+<pre>Copyright (c) ShadowGuard-AI</pre>
+<p>The preserved record itself is not altered. The repair is owned openly here, and nowhere else.</p>
+</section>
+
+<section class="compartment" id="tension-bench">
+<span class="pull">8</span>
+<h2>Compartment eight: the tension bench</h2>
+<p>Search arrivals get seated at the bench itself. Each arrival declares a quest, and only then does the framer pull open exactly one compartment, instead of tipping every drawer across the benchtop.</p>
+<ul>
+<li>Quest: epsilon. Open the epsilon compartment. Smaller versus larger is spelled beside a sketch contrasting one wedge tapped once against the same wedge tapped thrice, giving the accumulation caution a picture to inhabit: every tap counts, taps accumulate across runs, and a keeper who does not record them cannot claim to know how much tension the frame is truly under.</li>
+<li>Quest: sensitivity. Open the sensitivity compartment, the hundreds caution intact, the fallback of 1.0 stated as a default only.</li>
+<li>Quest: column. Open the switches compartment, where the named column is debated in prose and left undescribed in the list, both facts at full size.</li>
+<li>Quest: repeated jobs. Open the job compartment, where the untracked budget warning stands: running the same data more than once adds up in a way this tool does not record or limit.</li>
+<li>Quest: empty jobs. Open the output compartment: no values noised, an error, no file written, and no exit code invented.</li>
+<li>Quest: origins. Stay with the drawer card itself: earlier banner, superseded heading, repair owned openly in compartment three and in part B of compartment seven.</li>
+</ul>
+<p>Pupils, office clerks, and scholars reworking a dataset a second time get identical courtesy: one compartment, swung wide, contents legible, nothing surplus smuggled along, nothing pertinent hidden, and the drawer sliding home solely upon a visitor's nod. Shavings, canvas offcuts, and the odours of size and turpentine edge this page as margin texture, housing every factual compartment inside a genuine workshop instead of a weightless help file.</p>
+<p class="small">Kit wording kept whole on this bench: Tap the Wedge. Epsilon, Single Run. Sensitivity, Default 1.0. Output Never Equals Input. No Values Noised, No File Written. Hyperlinks on this page open with a dye vat glyph, paper grey whilst untouched, flaring solely whilst hovered or approached. Controls mimic wedge silhouettes: cloth pulled taut across a timber former, perimeter suggested by gold leaf books tinted pastel dust rose. Idle, the cloth looks level, dry, and matte. Hovering deepens the pigment slightly, as though a fingertip had tested tension. Clicking sweeps one brushstroke across the surface, and the stroke remains. No bouncing. No inner illumination.</p>
+</section>
+
+<section class="plain" id="record">
+<h2>The studio record, housed verbatim</h2>
+<p>The live README, complete, exactly as it stands in the repository. Identity faults inside it are preserved verbatim: the earlier organisational banner appears in its clone line and in its closing line, and both repairs live only on this website, labelled as repairs in compartments three and seven.</p>
+<pre>![Banner](banner.png)
+
+# dm-differential-privacy-noise-injector
+Adds Laplacian noise to numerical data. This is a per value Laplace mechanism with an operator supplied sensitivity and epsilon. Sensitivity is asserted by the operator and is never checked against the data, and no epsilon budget is tracked across runs, so running the same data more than once adds up in a way this tool does not record or limit. - Focused on Tools designed to generate or mask sensitive data with realistic-looking but meaningless values
+
+## Choosing parameters
+
+Epsilon is the privacy parameter for a single run. A smaller epsilon adds more noise and gives stronger privacy for that run. A larger epsilon adds less noise and gives weaker privacy, so the output stays closer to the original values.
+Sensitivity is the largest change one person or one record could make to a value in the named column, in the units of that column. Set it from what you know about the data before you run the tool. If a column can span hundreds, a sensitivity of 1 is too small for that column. The default sensitivity is 1.0.
+The output file must not be the same file as the input file. A run that noises no values exits with an error and writes no output file.
+
+## Install
+`git clone https://github.com/ShadowStrikeHQ/dm-differential-privacy-noise-injector`
+
+## Usage
+`./dm-differential-privacy-noise-injector [params]`
+
+## Parameters
+- `-h`: Show help message and exit
+- `--sensitivity`: No description provided
+- `--column`: No description provided
+- `--delimiter`: No description provided
+
+## License
+Copyright (c) ShadowStrikeHQ</pre>
+</section>
 </main>
-<footer>
-  <p>Dm Differential Privacy Noise Injector is one of my projects. This page was written
-  from the repo itself on 2026-10-30: the counts are the
-  repo's counts, the code is the repo's code, and the gaps are the
-  repo's gaps.</p>
-</footer>
 </body>
 </html>

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360" role="img" aria-label="Three stacked bands of the stretcher key drawer bench: lidded dye vats and racked stretchers, the open key drawer pulled an inch wider by a hand, and a stretcher key tapped into a frame corner">
+  <rect x="0" y="0" width="1200" height="360" fill="#FAF6EB"/>
+  <!-- Distant band: dye vats lidded and motionless, stretchers racked, north light level -->
+  <rect x="0" y="0" width="1200" height="112" fill="#E0E0DD"/>
+  <rect x="40" y="18" width="86" height="82" fill="#CAA668" stroke="#2B2B2E" stroke-width="3"/>
+  <rect x="52" y="28" width="62" height="62" fill="#E6E6E3" stroke="#4A4A4E" stroke-width="2"/>
+  <rect x="142" y="18" width="86" height="82" fill="#CAA668" stroke="#2B2B2E" stroke-width="3"/>
+  <rect x="154" y="28" width="62" height="62" fill="#E6E6E3" stroke="#4A4A4E" stroke-width="2"/>
+  <g stroke="#2B2B2E" stroke-width="3">
+    <rect x="330" y="38" width="64" height="62" fill="#E2B2B2"/>
+    <rect x="410" y="38" width="64" height="62" fill="#A4A4A1"/>
+    <rect x="490" y="38" width="64" height="62" fill="#E2B2B2"/>
+  </g>
+  <g fill="#2B2B2E">
+    <ellipse cx="362" cy="36" rx="38" ry="9"/>
+    <ellipse cx="442" cy="36" rx="38" ry="9"/>
+    <ellipse cx="522" cy="36" rx="38" ry="9"/>
+  </g>
+  <rect x="700" y="14" width="180" height="86" fill="#EDECE8" stroke="#2B2B2E" stroke-width="3"/>
+  <line x1="760" y1="14" x2="760" y2="100" stroke="#2B2B2E" stroke-width="4"/>
+  <line x1="700" y1="57" x2="880" y2="57" stroke="#2B2B2E" stroke-width="4"/>
+  <rect x="0" y="106" width="1200" height="6" fill="#2B2B2E"/>
+  <!-- Central band: a hand at the frame margin pulls the open key drawer an inch wider, then halts -->
+  <rect x="0" y="112" width="1200" height="118" fill="#E8C4C4"/>
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; 30 0; 30 0" keyTimes="0; 0.35; 1" dur="7s" repeatCount="indefinite"/>
+    <rect x="330" y="136" width="540" height="76" fill="#7A5A34" stroke="#2B2B2E" stroke-width="3"/>
+    <rect x="346" y="148" width="508" height="52" fill="#8F6B3E"/>
+    <line x1="516" y1="148" x2="516" y2="200" stroke="#2B2B2E" stroke-width="3"/>
+    <line x1="686" y1="148" x2="686" y2="200" stroke="#2B2B2E" stroke-width="3"/>
+    <g fill="#CAA668" stroke="#2B2B2E" stroke-width="2">
+      <polygon points="366,188 402,188 402,168"/>
+      <polygon points="424,188 460,188 460,168"/>
+      <polygon points="546,188 576,188 576,172"/>
+      <polygon points="596,188 626,188 626,172"/>
+      <polygon points="716,188 742,188 742,174"/>
+      <polygon points="758,188 784,188 784,174"/>
+    </g>
+    <ellipse cx="600" cy="222" rx="26" ry="8" fill="#FAF6EB" stroke="#2B2B2E" stroke-width="2"/>
+    <!-- the hand on the drawer pull, entering from the right margin -->
+    <path d="M 884 158 q 34 -6 44 12 q 4 10 -8 14 l -34 6 q -12 2 -14 -10 q -2 -18 12 -22 z" fill="#E8C4C4" stroke="#2B2B2E" stroke-width="3"/>
+  </g>
+  <rect x="0" y="224" width="1200" height="6" fill="#2B2B2E"/>
+  <!-- Closest band: the same hand slots a key into a frame corner and the mallet taps once -->
+  <rect x="0" y="230" width="1200" height="130" fill="#C9C9C7"/>
+  <rect x="90" y="252" width="330" height="88" fill="#9E7642" stroke="#2B2B2E" stroke-width="3"/>
+  <rect x="106" y="266" width="298" height="60" fill="#E6E6E3" stroke="#4A4A4E" stroke-width="2"/>
+  <line x1="106" y1="326" x2="404" y2="326" stroke="#2B2B2E" stroke-width="3">
+    <animate attributeName="y1" values="318; 326; 326" keyTimes="0; 0.45; 1" dur="7s" repeatCount="indefinite"/>
+    <animate attributeName="y2" values="318; 326; 326" keyTimes="0; 0.45; 1" dur="7s" repeatCount="indefinite"/>
+  </line>
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="26 0; 0 0; 0 0" keyTimes="0; 0.4; 1" dur="7s" repeatCount="indefinite"/>
+    <polygon points="404,266 452,272 452,300 404,300" fill="#CAA668" stroke="#2B2B2E" stroke-width="3"/>
+    <ellipse cx="436" cy="282" rx="7" ry="4" fill="none" stroke="#4A4A4E" stroke-width="2"/>
+    <path d="M 470 252 q 36 -8 46 10 q 5 11 -9 15 l -34 7 q -13 2 -15 -11 q -2 -17 12 -21 z" fill="#E8C4C4" stroke="#2B2B2E" stroke-width="3"/>
+  </g>
+  <g>
+    <animateTransform attributeName="transform" type="rotate" values="0 560 300; -14 560 300; 0 560 300; 0 560 300" keyTimes="0; 0.38; 0.48; 1" dur="7s" repeatCount="indefinite"/>
+    <line x1="560" y1="300" x2="612" y2="252" stroke="#9E7642" stroke-width="10"/>
+    <rect x="596" y="216" width="52" height="38" fill="#CAA668" stroke="#2B2B2E" stroke-width="3"/>
+  </g>
+  <text x="700" y="300" font-family="Cabin, sans-serif" font-size="17" fill="#2B2B2E">One tap. Canvas tightens by a fraction.</text>
+</svg>
